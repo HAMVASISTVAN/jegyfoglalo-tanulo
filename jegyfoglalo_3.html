@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Jegyfoglaló</title>
+     <style>
+     #nezoter span { display: inline-block;  width: 20px;  }
+</style> 
+</head>
+<body>
+<h1>Jegyfoglaló</h1>
+<label for="sor">Sor:</label>
+<select id="sor">
+    <option value="0">1</option>
+    <option value="1">2</option>
+    <option value="2">3</option>
+    <option value="3">4</option>
+    <option value="4">5</option>
+    <option value="5">6</option>
+    <option value="6">7</option>
+    <option value="7">8</option>
+    <option value="8">9</option>
+    <option value="9">10</option>
+</select>
+
+<label for="oszlop">Oszlop:</label>
+<select id="oszlop">
+    <option value="0">1</option>
+    <option value="1">2</option>
+    <option value="2">3</option>
+    <option value="3">4</option>
+    <option value="4">5</option>
+</select>
+
+<button id="foglal">Foglalás</button>
+<div id="nezoter"></div>  <!-- ide helyezzük el a visszaküldött nézőteret -->
+<script>
+// megszerezzük a választólisták és a gomb elemeit JavaScriptben
+let sor = document.getElementById("sor");
+let oszlop = document.getElementById("oszlop");
+let foglal = document.getElementById("foglal");
+
+    let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
+    fetch('http://localhost:3000/api/nezoter')
+    .then(response => response.json())
+    .then(adatok => {  // itt vannak a visszaérkezett adatok
+    for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
+       { for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) // az adott sor 5 elemén
+                 {  oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>"; 
+                    
+                  }
+                 oldal.innerHTML += "<br>";  // új sort kezdünk
+       }
+
+        
+    });  // fetch() - lánc vége
+foglal.addEventListener("click", function()
+{  console.log("Sor:", sor.value);
+   console.log("Oszlop:", oszlop.value);
+   fetch("http://localhost:3000/api/foglal", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ sor: sor.value,
+                               oszlop: oszlop.value
+                            })
+   })  // fetch() - lánc vége
+  .then(response => response.json())
+  .then(adat => {
+   console.log(adat);
+   alert(adat.uzenet);
+   oldal.innerHTML = "";
+         fetch("http://localhost:3000/api/nezoter")
+            .then(response => response.json())
+            .then(adatok => {
+            for (let sor = 0; sor < adatok.length; sor++) 
+                {  for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++)
+                         {  oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";  
+
+                         }
+                 oldal.innerHTML += "<br>";
+                }
+         }); // belső fetch-lánc zárása
+    });  // külső fetch-lánc zárása
+
+});  // eseménykezelő zárása
+</script>   
+</body>
+</html> 
