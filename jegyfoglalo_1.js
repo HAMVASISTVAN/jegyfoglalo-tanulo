@@ -6,7 +6,7 @@ const cors = require('cors');
 // A CORS pedig csak azért kell, mert most a Live Server 5500-as portjáról beszélgetünk az Express 3000-as portjával
 const app = express();
 app.use(cors());
-
+ 
 app.use(express.json());  // a backendnek tudnia kell fogadni a JSON-adatot amely a  frontend-ből érkezik
 // express.json() jelentése: ha a kliens JSON-adatot küld nekem, alakítsam át úgy, hogy a req.body segítségével el tudjam érni
 // const PORT = 3000;
