@@ -51,5 +51,5 @@ app.post("/api/foglal", function(req, res) {
             }
 });
 app.listen(PORT, () => {
-  console.log(`Szerver elindult a ${PORT} porton.`);
+  console.log("Szerver elindult a ${PORT} porton.");
 });
