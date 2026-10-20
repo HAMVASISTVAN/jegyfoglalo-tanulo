@@ -9,7 +9,8 @@ app.use(cors());
 
 app.use(express.json());  // a backendnek tudnia kell fogadni a JSON-adatot amely a  frontend-ből érkezik
 // express.json() jelentése: ha a kliens JSON-adatot küld nekem, alakítsam át úgy, hogy a req.body segítségével el tudjam érni
-const PORT = 3000;
+// const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 // a fenti sorok sorrendje fontos, be kell tartani
 // A nézőtér adatai
 let nezoter = [
@@ -49,6 +50,6 @@ app.post("/api/foglal", function(req, res) {
                   });
             }
 });
-app.listen(PORT, function() {
-    console.log("Szerver elindult a " + PORT + " porton.");
+app.listen(PORT, () => {
+  console.log(`Szerver elindult a ${PORT} porton.`);
 });
