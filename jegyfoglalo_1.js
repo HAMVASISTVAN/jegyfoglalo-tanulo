@@ -11,6 +11,9 @@ app.use(express.json());  // a backendnek tudnia kell fogadni a JSON-adatot amel
 // express.json() jelentése: ha a kliens JSON-adatot küld nekem, alakítsam át úgy, hogy a req.body segítségével el tudjam érni
 // const PORT = 3000;
 const PORT = process.env.PORT || 3000;
+const path = require('path');
+// Statikus fájlok kiszolgálása
+app.use(express.static(__dirname));
 // a fenti sorok sorrendje fontos, be kell tartani
 // A nézőtér adatai
 let nezoter = [
@@ -28,6 +31,12 @@ let nezoter = [
 // ha valaki GET kéréssel meghívja a /api/nezoter címet, akkor hajtsd végre ezt a függvényt
 // a backend szépen visszaküldi a nezoter tömböt JSON-formátumban
 // http://localhost:3000/api/nezoter
+
+// A főoldal megnyitásakor a jegyfoglalo_3.html fájl visszaküldése
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'jegyfoglalo_3.html'));
+});
+
 app.get("/api/nezoter", function(req, res) {
     res.json(nezoter);
 });
