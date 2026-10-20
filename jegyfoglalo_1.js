@@ -53,7 +53,7 @@ app.post("/api/foglal", function(req, res) {
                   uzenet: "Sikeres foglalás"
                 });
      }
-    else   { res.json({
+    else   { res.json({ 
              siker: false,
              uzenet: "Ez a hely már foglalt!"
                   });
