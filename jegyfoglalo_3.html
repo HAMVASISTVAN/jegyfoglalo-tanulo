@@ -6,7 +6,10 @@
      <title>Jegyfoglaló</title>
      <style>
      #nezoter span { display: inline-block;  width: 20px;  }
-</style> 
+      .foglalt {  color: red;
+                  font-weight: bold;
+               }
+     </style> 
 </head>
 <body>
 <h1>Jegyfoglaló</h1>
@@ -47,8 +50,10 @@ let foglal = document.getElementById("foglal");
     .then(adatok => {  // itt vannak a visszaérkezett adatok
     for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
        { for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) // az adott sor 5 elemén
-                 {  oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>"; 
-                    
+                 { // oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>"; 
+                    if (adatok[sor][oszlop] === "F")
+                          { oldal.innerHTML += '<span class="foglalt">F</span>'; }
+                    else  { oldal.innerHTML += "<span>S</span>"; }
                   }
                  oldal.innerHTML += "<br>";  // új sort kezdünk
        }
@@ -75,8 +80,10 @@ foglal.addEventListener("click", function()
             .then(adatok => {
             for (let sor = 0; sor < adatok.length; sor++) 
                 {  for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++)
-                         {  oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";  
-
+                         { // oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";  
+                              if (adatok[sor][oszlop] === "F")
+                                    { oldal.innerHTML += '<span class="foglalt">F</span>'; }
+                              else  { oldal.innerHTML += "<span>S</span>"; }
                          }
                  oldal.innerHTML += "<br>";
                 }
