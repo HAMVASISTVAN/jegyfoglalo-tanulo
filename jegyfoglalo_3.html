@@ -42,7 +42,7 @@ let oszlop = document.getElementById("oszlop");
 let foglal = document.getElementById("foglal");
 
     let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
-    fetch('http://localhost:3000/api/nezoter')
+    fetch("/api/nezoter")
     .then(response => response.json())
     .then(adatok => {  // itt vannak a visszaérkezett adatok
     for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
@@ -58,7 +58,7 @@ let foglal = document.getElementById("foglal");
 foglal.addEventListener("click", function()
 {  console.log("Sor:", sor.value);
    console.log("Oszlop:", oszlop.value);
-   fetch("http://localhost:3000/api/foglal", {
+   fetch("/api/foglal", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ sor: sor.value,
@@ -70,7 +70,7 @@ foglal.addEventListener("click", function()
    console.log(adat);
    alert(adat.uzenet);
    oldal.innerHTML = "";
-         fetch("http://localhost:3000/api/nezoter")
+         fetch("/api/nezoter")
             .then(response => response.json())
             .then(adatok => {
             for (let sor = 0; sor < adatok.length; sor++) 
