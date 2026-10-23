@@ -50,12 +50,12 @@ app.post("/api/foglal", function(req, res) {
     {  nezoter[sor][oszlop] = "F";
        // res.json(req.body);   // server válasza a frontendnek JSON-formátumban
        res.json({ siker: true,
-                  uzenet: "Sikeres foglalás"
+                  uzenet: "Sikeres foglalás !"
                 });
      }
     else   { res.json({ 
              siker: false,
-             uzenet: "Ez a hely már foglalt!"
+             uzenet: "Ez a hely már foglalt !"
                   });
             }
 });
