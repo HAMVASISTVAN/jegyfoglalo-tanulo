@@ -73,7 +73,7 @@ let uzenet = document.getElementById("uzenet");
 // A teljes nézőtér kirajzolása
 function nezoTerFrissitese() {
 
-    fetch("http://localhost:3000/api/nezoter")
+    fetch("/api/nezoter")
         .then(response => response.json())
         .then(adatok => {
 
