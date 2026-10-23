@@ -1,40 +1,27 @@
-
 <!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jegyfoglaló</title>
+     <title>Jegyfoglaló</title>
+     <style>
+     #nezoter span { display: inline-block;  width: 20px;  }
+    .foglalt       { color: red; font-weight: bold; }
+      body         { background-color: azure;
+                     font-size: 20px;
+                     padding: 10px;
+                   }
 
-    <style>
-        #nezoter span {
-            display: inline-block;
-            width: 20px;
-        }
+    input, select, button {
+        font-size: 20px;
+        padding: 10px;
+        margin: 5px;
+    }
 
-        .foglalt {
-            color: red;
-            font-weight: bold;
-        }
-
-        body {
-            background-color: azure;
-            font-size: 20px;
-            padding: 10px;
-        }
-
-        input, select, button {
-            font-size: 20px;
-            padding: 10px;
-            margin: 5px;
-        }
-    </style>
+</style> 
 </head>
-
 <body>
-
 <h1>Jegyfoglaló</h1>
-
 <label for="sor">Sor:</label>
 <select id="sor">
     <option value="0">1</option>
@@ -59,49 +46,35 @@
 </select>
 
 <button id="foglal">Foglalás</button>
-
-<div id="nezoter"></div>
-<p id="uzenet"></p>
-
+<div id="nezoter"></div>  <!-- ide helyezzük el a visszaküldött nézőteret -->
+<p id="uzenet"></p>       <!--ide kerül az jegyfoglalás üzenete -->
 <script>
-// HTML-elemek megkeresése
+// megszerezzük a választólisták és a gomb elemeit JavaScriptben
 let sor = document.getElementById("sor");
 let oszlop = document.getElementById("oszlop");
 let foglal = document.getElementById("foglal");
-let oldal = document.getElementById("nezoter");
+let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
 let uzenet = document.getElementById("uzenet");
-
-// A teljes nézőtér kirajzolása
-function nezoTerFrissitese() {
-
-    fetch("http://localhost:3000/api/nezoter")
-        .then(response => response.json())
-        .then(adatok => {
-
-            let html = "";
-
-            for (let sor = 0; sor < adatok.length; sor++) {
-                for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) {
-
-                    let id = sor + "-" + oszlop; // ezek egyszerű számok, ezért nem kell utánuk .value
-                                                  // id tartalma ekkor: 0-1
-                    if (adatok[sor][oszlop] === "F") {
-                        html += '<span id="' + id + '" class="foglalt">F</span>';
-                    } else {
-                        html += '<span id="' + id + '">S</span>';
-                    }
-                }
-
-                html += "<br>";
-            }
-
-            oldal.innerHTML = html;
-        });
-}
-
+    fetch('/api/nezoter')
+    .then(response => response.json())
+    .then(adatok => {  // itt vannak a visszaérkezett adatok
+    for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
+       { for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) // az adott sor 5 elemén
+                 {   //oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";                   
+                    
+                    let id = sor + "-" + oszlop; // ezek egyszerű számok, ezért nem kell utánuk .value                                                  // id tartalma ekkor: 0-1
+                    if (adatok[sor][oszlop] === "F") { html += '<span id="' + id + '" class="foglalt">F</span>'; } 
+                    else { html += '<span id="' + id + '">S</span>';}
+                    
+                  }
+                 oldal.innerHTML += "<br>";  // új sort kezdünk
+       }
 // A nézőtér betöltése az oldal megnyitásakor
 nezoTerFrissitese();
 
+        
+    });  // fetch() - lánc vége
+    
 // Foglalás gomb kezelése
 foglal.addEventListener("click", function() {
 
@@ -132,8 +105,6 @@ foglal.addEventListener("click", function() {
         }
     });
 });
-</script>
-
+</script>   
 </body>
-</html>
-
+</html> 
