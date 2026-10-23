@@ -27,7 +27,7 @@
     <option value="9">10</option>
 </select>
 
-<label for="oszlop">Oszlop:</label>
+<label for="oszlop">Szék:</label>
 <select id="oszlop">
     <option value="0">1</option>
     <option value="1">2</option>
@@ -38,6 +38,7 @@
 
 <button id="foglal">Foglalás</button>
 <div id="nezoter"></div>  <!-- ide helyezzük el a visszaküldött nézőteret -->
+<p id="uzenet"></p>       <!-- ide kerül a jegyfoglalás üzenete (sikeres/foglalt) -->
 <script>
 // megszerezzük a választólisták és a gomb elemeit JavaScriptben
 let sor = document.getElementById("sor");
