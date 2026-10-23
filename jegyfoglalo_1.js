@@ -13,7 +13,7 @@ app.use(express.json());  // a backendnek tudnia kell fogadni a JSON-adatot amel
 const PORT = process.env.PORT || 3000;
 const path = require('path');
 // Statikus fájlok kiszolgálása
-app.use(express.static(__dirname)); 
+app.use(express.static(__dirname));  
 // a fenti sorok sorrendje fontos, be kell tartani
 // A nézőtér adatai
 let nezoter = [
