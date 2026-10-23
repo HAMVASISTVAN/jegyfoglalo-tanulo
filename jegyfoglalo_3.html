@@ -55,20 +55,34 @@ let oszlop = document.getElementById("oszlop");
 let foglal = document.getElementById("foglal");
 let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
 let uzenet = document.getElementById("uzenet");
-    fetch('/api/nezoter')
-    .then(response => response.json())
-    .then(adatok => {  // itt vannak a visszaérkezett adatok
-    for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
-       { for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) // az adott sor 5 elemén
-                 {   //oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";                   
-                    
-                    let id = sor + "-" + oszlop; // ezek egyszerű számok, ezért nem kell utánuk .value                                                  // id tartalma ekkor: 0-1
-                    if (adatok[sor][oszlop] === "F") { html += '<span id="' + id + '" class="foglalt">F</span>'; } 
-                    else { html += '<span id="' + id + '">S</span>';}
-                    
-                  }
-                 oldal.innerHTML += "<br>";  // új sort kezdünk
-       }
+    // A teljes nézőtér kirajzolása
+function nezoTerFrissitese() {
+
+    fetch("http://localhost:3000/api/nezoter")
+        .then(response => response.json())
+        .then(adatok => {
+
+            let html = "";
+
+            for (let sor = 0; sor < adatok.length; sor++) {
+                for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) {
+
+                    let id = sor + "-" + oszlop; // ezek egyszerű számok, ezért nem kell utánuk .value
+                                                  // id tartalma ekkor: 0-1
+                    if (adatok[sor][oszlop] === "F") {
+                        html += '<span id="' + id + '" class="foglalt">F</span>';
+                    } else {
+                        html += '<span id="' + id + '">S</span>';
+                    }
+                }
+
+                html += "<br>";
+            }
+
+            oldal.innerHTML = html;
+        });
+}
+
 // A nézőtér betöltése az oldal megnyitásakor
 nezoTerFrissitese();
 
