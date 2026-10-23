@@ -75,6 +75,7 @@ foglal.addEventListener("click", function()
   .then(adat => {
    console.log(adat);
    // alert(adat.uzenet);
+   document.getElementById("uzenet").textContent = adat.uzenet;   
    oldal.innerHTML = "";
          fetch("/api/nezoter")
             .then(response => response.json())
