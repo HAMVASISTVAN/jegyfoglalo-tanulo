@@ -43,8 +43,8 @@
 let sor = document.getElementById("sor");
 let oszlop = document.getElementById("oszlop");
 let foglal = document.getElementById("foglal");
-
-    let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
+let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
+    
     fetch("/api/nezoter")
     .then(response => response.json())
     .then(adatok => {  // itt vannak a visszaérkezett adatok
