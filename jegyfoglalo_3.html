@@ -78,7 +78,7 @@ nezoTerFrissitese();
 // Foglalás gomb kezelése
 foglal.addEventListener("click", function() {
 
-    fetch("http://localhost:3000/api/foglal", {
+    fetch("/api/foglal", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
