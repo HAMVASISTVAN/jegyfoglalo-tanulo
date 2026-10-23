@@ -1,21 +1,40 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Jegyfoglaló</title>
-     <style>
-     #nezoter span { display: inline-block;  width: 20px;  }
-     .foglalt {  color: red; font-weight: bold; }
-     body  {   font-size: 20px; padding: 10px;  background-color: azure;}
-     input, select, button { font-size: 20px;
-                             padding: 10px;
-                             margin: 5px;
-                          }
-     </style> 
+    <title>Jegyfoglaló</title>
+
+    <style>
+        #nezoter span {
+            display: inline-block;
+            width: 20px;
+        }
+
+        .foglalt {
+            color: red;
+            font-weight: bold;
+        }
+
+        body {
+            background-color: azure;
+            font-size: 20px;
+            padding: 10px;
+        }
+
+        input, select, button {
+            font-size: 20px;
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
 </head>
+
 <body>
+
 <h1>Jegyfoglaló</h1>
+
 <label for="sor">Sor:</label>
 <select id="sor">
     <option value="0">1</option>
@@ -36,66 +55,85 @@
     <option value="1">2</option>
     <option value="2">3</option>
     <option value="3">4</option>
-    <option value="4">5</option> 
+    <option value="4">5</option>
 </select>
 
 <button id="foglal">Foglalás</button>
-<div id="nezoter"></div>  <!-- ide helyezzük el a visszaküldött nézőteret -->
-<p id="uzenet"></p>       <!-- ide kerül a jegyfoglalás üzenete (sikeres/foglalt) -->
+
+<div id="nezoter"></div>
+<p id="uzenet"></p>
+
 <script>
-// megszerezzük a választólisták és a gomb elemeit JavaScriptben
+// HTML-elemek megkeresése
 let sor = document.getElementById("sor");
 let oszlop = document.getElementById("oszlop");
 let foglal = document.getElementById("foglal");
-let oldal = document.getElementById("nezoter");  // először szerezzük meg a <div>-et:
-    
-    fetch("/api/nezoter")
-    .then(response => response.json())
-    .then(adatok => {  // itt vannak a visszaérkezett adatok
-    for (let sor = 0; sor < adatok.length; sor++) // végigmegyün a 10 soron
-       { for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) // az adott sor 5 elemén
-                 { // oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>"; 
-                    if (adatok[sor][oszlop] === "F")
-                          { oldal.innerHTML += '<span class="foglalt">F</span>'; }
-                    else  { oldal.innerHTML += "<span>S</span>"; }
-                  }
-                 oldal.innerHTML += "<br>";  // új sort kezdünk
-       }
+let oldal = document.getElementById("nezoter");
+let uzenet = document.getElementById("uzenet");
 
-        
-    });  // fetch() - lánc vége
-foglal.addEventListener("click", function()
-{  console.log("Sor:", sor.value);
-   console.log("Oszlop:", oszlop.value);
-   fetch("/api/foglal", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ sor: sor.value,
-                               oszlop: oszlop.value
-                            })
-   })  // fetch() - lánc vége
-  .then(response => response.json())
-  .then(adat => {
-   console.log(adat);
-   // alert(adat.uzenet);
-   document.getElementById("uzenet").textContent = adat.uzenet;   
-   oldal.innerHTML = "";
-         fetch("/api/nezoter")
-            .then(response => response.json())
-            .then(adatok => {
-            for (let sor = 0; sor < adatok.length; sor++) 
-                {  for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++)
-                         { // oldal.innerHTML += "<span>" + adatok[sor][oszlop] + "</span>";  
-                              if (adatok[sor][oszlop] === "F")
-                                    { oldal.innerHTML += '<span class="foglalt">F</span>'; }
-                              else  { oldal.innerHTML += "<span>S</span>"; }
-                         }
-                 oldal.innerHTML += "<br>";
+// A teljes nézőtér kirajzolása
+function nezoTerFrissitese() {
+
+    fetch("http://localhost:3000/api/nezoter")
+        .then(response => response.json())
+        .then(adatok => {
+
+            let html = "";
+
+            for (let sor = 0; sor < adatok.length; sor++) {
+                for (let oszlop = 0; oszlop < adatok[sor].length; oszlop++) {
+
+                    let id = sor + "-" + oszlop; // ezek egyszerű számok, ezért nem kell utánuk .value
+                                                  // id tartalma ekkor: 0-1
+                    if (adatok[sor][oszlop] === "F") {
+                        html += '<span id="' + id + '" class="foglalt">F</span>';
+                    } else {
+                        html += '<span id="' + id + '">S</span>';
+                    }
                 }
-         }); // belső fetch-lánc zárása
-    });  // külső fetch-lánc zárása
 
-});  // eseménykezelő zárása
-</script>   
+                html += "<br>";
+            }
+
+            oldal.innerHTML = html;
+        });
+}
+
+// A nézőtér betöltése az oldal megnyitásakor
+nezoTerFrissitese();
+
+// Foglalás gomb kezelése
+foglal.addEventListener("click", function() {
+
+    fetch("http://localhost:3000/api/foglal", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            sor: sor.value,
+            oszlop: oszlop.value
+        })
+    })
+    .then(response => response.json())
+    .then(adat => {
+
+        // Sikeres vagy sikertelen foglalás üzenete
+        uzenet.textContent = adat.uzenet;
+
+        // Csak sikeres foglaláskor változtatjuk meg a széket
+        if (adat.siker === true) {
+
+            let id = sor.value + "-" + oszlop.value;
+            let szek = document.getElementById(id);
+
+            szek.textContent = "F";
+            szek.classList.add("foglalt");
+        }
+    });
+});
+</script>
+
 </body>
-</html> 
+</html>
+
